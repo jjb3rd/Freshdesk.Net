@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
+    <projectUrl>https://github.com/jjb3rd/Freshdesk.Net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release with support for creating contacts, customers and tickets.</releaseNotes>
+    <copyright>Copyright 2014 Beckersoft, Inc.</copyright>
+    <tags>Freshdesk</tags>
+  </metadata>
+</package>

@@ -1,4 +1,7 @@
 # Freshdesk.NET
 
-.NET wrapper for the Freshdesk REST API
+Freshdesk.Net is a .NET library for freshdesk.com's REST API.  It can be used to create contacts, customers and tickets.  
 
+#### Nuget Packages
+
+	PM> Install-Package Freshdesk
