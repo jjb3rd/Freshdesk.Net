@@ -19,6 +19,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+using System.Reflection;
+using System.Web;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -72,8 +75,8 @@ namespace Freshdesk
             {
                 httpRequest.UserAgent = UserAgent;
             }
-            
-            webRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(this.ApiKey + ":" + "X"));
+
+            webRequest.Headers["Authorization"] = GetAuthorizationHeader(ApiKey);
             
             if (method == "POST")
             {
@@ -81,6 +84,26 @@ namespace Freshdesk
                 webRequest.ContentType = "application/json";
             }
             return webRequest;
+        }
+
+        protected virtual WebRequest SetupMultipartRequest(Uri uri)
+        {
+            var webRequest = (HttpWebRequest) WebRequest.Create(uri);
+
+            webRequest.Headers.Clear();
+
+            webRequest.Method = "POST";
+            webRequest.KeepAlive = true;
+            webRequest.Headers[HttpRequestHeader.Authorization] = GetAuthorizationHeader(ApiKey);
+
+            return webRequest;
+        }
+
+        private string GetAuthorizationHeader(string apiKey)
+        {
+            return "Basic " +
+                   Convert.ToBase64String(
+                       Encoding.Default.GetBytes(apiKey + ":" + "X"));
         }
 
         static string GetResponseAsString(WebResponse response)
@@ -98,6 +121,12 @@ namespace Freshdesk
         protected virtual T DoRequest<T>(Uri uri, string method, string body)
         {
             var json = DoRequest(uri, method, body);
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        protected virtual T DoMultipartFormRequest<T>(Uri uri, object body, IEnumerable<Attachment> attachments, string attachmentsKey)
+        {
+            var json = DoMultipartFormRequest(uri, body, attachments, attachmentsKey);
             return JsonConvert.DeserializeObject<T>(json);
         }
 
@@ -147,12 +176,136 @@ namespace Freshdesk
             return result;
         }
 
+        protected virtual string DoMultipartFormRequest(Uri uri, object body, IEnumerable<Attachment> attachments, string attachmentsKey)
+        {            
+            var webRequest = SetupMultipartRequest(uri);
+            var boundary = "----------------------------" + DateTime.Now.Ticks.ToString("x");
+            webRequest.ContentType = "multipart/form-data; boundary=" + boundary;
+            var stringsContent = GetStringsContent(body);
+
+            using (var requestStream = webRequest.GetRequestStream())
+            {
+                foreach (var pair in stringsContent)
+                {
+                    WriteBoundaryBytes(requestStream, boundary, false);
+                    WriteContentDispositionFormDataHeader(requestStream, pair.Key);
+                    WriteString(requestStream, pair.Value);
+                    WriteCrlf(requestStream);
+                }
+
+                foreach (var attachment in attachments)
+                {
+                    WriteBoundaryBytes(requestStream, boundary, false);
+
+                    WriteContentDispositionFileHeader(requestStream, attachmentsKey,
+                        attachment.FileName, MimeMapping.GetMimeMapping(attachment.FileName));
+                    var data = new byte[attachment.Content.Length];
+                    attachment.Content.Read(data, 0, data.Length);
+
+                    requestStream.Write(data, 0, data.Length);
+                    WriteCrlf(requestStream);
+                }
+
+                WriteBoundaryBytes(requestStream, boundary, true);
+
+                requestStream.Close();
+            }
+
+            var response = webRequest.GetResponse();
+            return GetResponseAsString(response);
+        }
+
         protected virtual Uri UriForPath(string path)
         {
             UriBuilder uriBuilder = new UriBuilder(this.ApiUri);
             uriBuilder.Path = path;
             return uriBuilder.Uri;
         }
+
+        private static Dictionary<string, string> GetStringsContent(object instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            Type classType = instance.GetType();
+            var properties = new Dictionary<string, string>();
+            foreach (PropertyInfo propertyInfo in classType.GetProperties())
+            {
+                var propertyValue = propertyInfo.GetValue(instance, null);
+                if (propertyValue == null)
+                {
+                    continue;
+                }
+
+                if (!propertyInfo.PropertyType.IsPrimitive
+                    && propertyInfo.PropertyType != typeof(decimal) && propertyInfo.PropertyType != typeof(string))
+                {
+                    var stringsContent = GetStringsContent(propertyValue);
+                    foreach (var content in stringsContent)
+                    {
+                        properties.Add(content.Key, content.Value);
+                    }
+                    continue;
+                }
+
+                object[] attributes = propertyInfo.GetCustomAttributes(true);
+                string propertyName = null;
+                foreach (object attribute in attributes)
+                {
+                    var jsonPropertyAttribute = attribute as JsonPropertyAttribute;
+                    if (jsonPropertyAttribute != null)
+                    {
+                        propertyName = jsonPropertyAttribute.PropertyName;
+                        break;
+                    }
+                }
+
+                if (propertyName == null)
+                {
+                    propertyName = propertyInfo.Name;
+                }
+
+                properties[string.Format("helpdesk_ticket[{0}]", propertyName)] = propertyValue.ToString();
+            }
+            return properties;
+        }
+
+        private static void WriteCrlf(Stream requestStream)
+        {
+            byte[] crLf = Encoding.ASCII.GetBytes("\r\n");
+            requestStream.Write(crLf, 0, crLf.Length);
+        }
+
+        private static void WriteBoundaryBytes(Stream requestStream, string b, bool isFinalBoundary)
+        {
+            string boundary = isFinalBoundary ? "--" + b + "--" : "--" + b + "\r\n";
+            byte[] d = Encoding.ASCII.GetBytes(boundary);
+            requestStream.Write(d, 0, d.Length);
+        }
+
+        private static void WriteContentDispositionFormDataHeader(Stream requestStream, string name)
+        {
+            string data = "Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n";
+            byte[] b = Encoding.ASCII.GetBytes(data);
+            requestStream.Write(b, 0, b.Length);
+        }
+
+        private static void WriteContentDispositionFileHeader(Stream requestStream, string name, string fileName, string contentType)
+        {
+            string data = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + fileName + "\"\r\n";
+            data += "Content-Type: " + contentType + "\r\n\r\n";
+            byte[] b = Encoding.ASCII.GetBytes(data);
+            requestStream.Write(b, 0, b.Length);
+        }
+
+        private static void WriteString(Stream requestStream, string data)
+        {
+            byte[] b = Encoding.ASCII.GetBytes(data);
+            requestStream.Write(b, 0, b.Length);
+        }
+
         #endregion
 
         #region Customers
@@ -184,6 +337,26 @@ namespace Freshdesk
                 throw new ArgumentNullException("createTicketRequest");
             }
             return DoRequest<GetTicketResponse>(UriForPath("/helpdesk/tickets.json"), "POST", JsonConvert.SerializeObject(createTicketRequest));
+        }
+
+        /// <summary>
+        /// Creates a Support Ticket with an attachment
+        /// </summary>
+        /// <param name="createTicketRequest"></param>
+        /// <param name="attachments"></param>
+        /// <returns></returns>
+        public GetTicketResponse CreateTicketWithAttachment(CreateTicketRequest createTicketRequest, IEnumerable<Attachment> attachments)
+        {
+            if (createTicketRequest == null)
+            {
+                throw new ArgumentNullException("createTicketRequest");
+            }
+            if (attachments == null)
+            {
+                throw new ArgumentNullException("attachments");
+            }
+
+            return DoMultipartFormRequest<GetTicketResponse>(UriForPath("/helpdesk/tickets.json"), createTicketRequest, attachments, "helpdesk_ticket[attachments][][resource]");
         }
         #endregion
 

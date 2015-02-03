@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Freshdesk.Tests
@@ -44,6 +45,32 @@ namespace Freshdesk.Tests
             Assert.IsNotNull(ticketResponse);
             Assert.IsNotNull(ticketResponse.TicketInfo);
 
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), TestMethod]
+        public void TestFreshdeskCreateTicketWithAttachment()
+        {
+            // create Support Ticket for a followup demonstration with Support software integration
+            var ticketResponse = freshdeskService.CreateTicketWithAttachment(new CreateTicketRequest
+            {
+                TicketInfo = new CreateTicketInfo
+                {
+                    Email = "demo@acme.com",
+                    Subject = "Attachment test",
+                    Description = "Description text",
+                    Priority = 1,
+                    Status = 2
+                }
+            }, new Collection<Attachment>
+            {
+                new Attachment
+                {
+                    Content = File.OpenRead("Freshdesk.dll"),
+                    FileName = "Freshdesk.dll"
+                }
+            });            
+            Assert.IsNotNull(ticketResponse);
+            Assert.IsNotNull(ticketResponse.TicketInfo);
         }
     }
 }
