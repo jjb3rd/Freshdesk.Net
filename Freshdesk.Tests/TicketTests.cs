@@ -67,6 +67,11 @@ namespace Freshdesk.Tests
                 {
                     Content = File.OpenRead("Freshdesk.dll"),
                     FileName = "Freshdesk.dll"
+                },
+                new Attachment
+                {
+                    Content = File.OpenRead("Freshdesk.pdb"),
+                    FileName = "Freshdesk.pdb"
                 }
             });            
             Assert.IsNotNull(ticketResponse);

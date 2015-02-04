@@ -124,9 +124,9 @@ namespace Freshdesk
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        protected virtual T DoMultipartFormRequest<T>(Uri uri, object body, IEnumerable<Attachment> attachments, string attachmentsKey)
+        protected virtual T DoMultipartFormRequest<T>(Uri uri, object body, IEnumerable<Attachment> attachments, string propertiesArrayName, string attachmentsKey)
         {
-            var json = DoMultipartFormRequest(uri, body, attachments, attachmentsKey);
+            var json = DoMultipartFormRequest(uri, body, attachments, propertiesArrayName, attachmentsKey);
             return JsonConvert.DeserializeObject<T>(json);
         }
 
@@ -176,7 +176,8 @@ namespace Freshdesk
             return result;
         }
 
-        protected virtual string DoMultipartFormRequest(Uri uri, object body, IEnumerable<Attachment> attachments, string attachmentsKey)
+        protected virtual string DoMultipartFormRequest(Uri uri, object body, IEnumerable<Attachment> attachments, 
+            string propertiesArrayName, string attachmentsKey)
         {            
             var webRequest = SetupMultipartRequest(uri);
             var boundary = "----------------------------" + DateTime.Now.Ticks.ToString("x");
@@ -188,7 +189,7 @@ namespace Freshdesk
                 foreach (var pair in stringsContent)
                 {
                     WriteBoundaryBytes(requestStream, boundary, false);
-                    WriteContentDispositionFormDataHeader(requestStream, pair.Key);
+                    WriteContentDispositionFormDataHeader(requestStream, string.Format("{0}[{1}]", propertiesArrayName, pair.Key));
                     WriteString(requestStream, pair.Value);
                     WriteCrlf(requestStream);
                 }
@@ -267,7 +268,7 @@ namespace Freshdesk
                     propertyName = propertyInfo.Name;
                 }
 
-                properties[string.Format("helpdesk_ticket[{0}]", propertyName)] = propertyValue.ToString();
+                properties[propertyName] = propertyValue.ToString();
             }
             return properties;
         }
@@ -356,7 +357,7 @@ namespace Freshdesk
                 throw new ArgumentNullException("attachments");
             }
 
-            return DoMultipartFormRequest<GetTicketResponse>(UriForPath("/helpdesk/tickets.json"), createTicketRequest, attachments, "helpdesk_ticket[attachments][][resource]");
+            return DoMultipartFormRequest<GetTicketResponse>(UriForPath("/helpdesk/tickets.json"), createTicketRequest, attachments, "helpdesk_ticket", "helpdesk_ticket[attachments][][resource]");
         }
         #endregion
 
