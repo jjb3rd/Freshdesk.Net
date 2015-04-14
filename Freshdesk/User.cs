@@ -26,6 +26,13 @@ using System.Threading.Tasks;
 namespace Freshdesk
 {
     [JsonObject(MemberSerialization.OptIn)]
+    public class GetUserRequest
+    {
+        [JsonProperty("user")]
+        public User User { get; set; }
+    }
+
+    [JsonObject(MemberSerialization.OptIn)]
     public class User
     {
         [JsonProperty(PropertyName = "id", NullValueHandling = NullValueHandling.Ignore)]
@@ -87,5 +94,8 @@ namespace Freshdesk
 
         [JsonProperty(PropertyName = "active", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Active { get; set; }
+
+        [JsonProperty(PropertyName = "custom_field", NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, string> CustomField { get; set; } 
     }
 }

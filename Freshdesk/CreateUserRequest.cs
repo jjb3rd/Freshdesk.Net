@@ -31,4 +31,11 @@ namespace Freshdesk
         [JsonProperty(PropertyName = "user")]
         public User User { get; set; }
     }
+
+    [JsonObject(MemberSerialization.OptIn)]
+    public class UpdateUserRequest
+    {
+        [JsonProperty(PropertyName = "user")]
+        public User User { get; set; }
+    }
 }

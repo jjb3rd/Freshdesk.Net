@@ -79,7 +79,7 @@ namespace Freshdesk
 
             webRequest.Headers["Authorization"] = GetAuthorizationHeader(ApiKey);
             
-            if (method == "POST")
+            if (method == "POST" || method == "PUT")
             {
                 //req.ContentType = "application/x-www-form-urlencoded";
                 webRequest.ContentType = "application/json";
@@ -376,6 +376,31 @@ namespace Freshdesk
             }
             return DoRequest<GetUserResponse>(UriForPath("/contacts.json"), "POST", JsonConvert.SerializeObject(createUserRequest));
         }
+
+        /// <summary>
+        /// Update a contact
+        /// </summary>
+        /// <param name="updateUserRequest"></param>
+        /// <param name="id"></param>
+        public void UpdateUser(UpdateUserRequest updateUserRequest, long id)
+        {
+            if (updateUserRequest == null)
+            {
+                throw new ArgumentNullException("updateUserRequest");
+            }
+            DoRequest<string>(UriForPath(string.Format("/contacts/{0}.json", id)), "PUT", JsonConvert.SerializeObject(updateUserRequest));
+        }
+
+        /// <summary>
+        /// Get users
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<GetUserRequest> GetUsers()
+        {
+            return DoRequest<IEnumerable<GetUserRequest>>(UriForPath("/contacts.json"));
+        }
+
+
         #endregion
 
     }
