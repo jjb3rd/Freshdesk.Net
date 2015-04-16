@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2014 Beckersoft, Inc.
+ * Copyright 2015 Beckersoft, Inc.
  *
  * Author(s):
  *  John Becker (john@beckersoft.com)

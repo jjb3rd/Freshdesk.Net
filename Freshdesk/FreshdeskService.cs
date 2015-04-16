@@ -1,9 +1,10 @@
 ﻿/*
- * Copyright 2014 Beckersoft, Inc.
+ * Copyright 2015 Beckersoft, Inc.
  *
  * Author(s):
  *  John Becker (john@beckersoft.com)
  *  Oleg Shevchenko (shevchenko.oleg@outlook.com)
+ *  Joseph Poh (github user jozsurf)
  *  
  *  Some web code is derived from work authored by:
  * 	Gonzalo Paniagua Javier (gonzalo@xamarin.com)

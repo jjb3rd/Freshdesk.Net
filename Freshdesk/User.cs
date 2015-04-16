@@ -1,8 +1,9 @@
 ﻿/*
- * Copyright 2014 Beckersoft, Inc.
+ * Copyright 2015 Beckersoft, Inc.
  *
  * Author(s):
  *  John Becker (john@beckersoft.com)
+ *  Joseph Poh (github user jozsurf)
  *  
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

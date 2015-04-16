@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release with support for creating contacts, customers and tickets.</releaseNotes>
-    <copyright>Copyright 2014 Beckersoft, Inc.</copyright>
+    <copyright>Copyright 2014-2015 Beckersoft, Inc.</copyright>
     <tags>Freshdesk</tags>
   </metadata>
 </package>
