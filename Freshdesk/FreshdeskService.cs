@@ -31,7 +31,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Freshdesk
 {
@@ -218,12 +217,16 @@ namespace Freshdesk
             return GetResponseAsString(response);
         }
 
-        protected virtual Uri UriForPath(string path)
-        {
-            UriBuilder uriBuilder = new UriBuilder(this.ApiUri);
-            uriBuilder.Path = path;
-            return uriBuilder.Uri;
-        }
+		protected virtual Uri UriForPath(string path, string query = null)
+		{
+			UriBuilder uriBuilder = new UriBuilder(this.ApiUri);
+			uriBuilder.Path = path;
+			if (!string.IsNullOrEmpty(query))
+			{
+				uriBuilder.Query = query;
+			}
+			return uriBuilder.Uri;
+		}
 
         private static Dictionary<string, string> GetStringsContent(object instance)
         {
@@ -396,10 +399,25 @@ namespace Freshdesk
         /// Get users
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<GetUserRequest> GetUsers()
-        {
-            return DoRequest<IEnumerable<GetUserRequest>>(UriForPath("/contacts.json"));
-        }
+		public IEnumerable<GetUserRequest> GetUsers()
+		{
+			var users = new List<GetUserRequest>();
+			var page = 1;
+			while (true)
+			{
+				var paginatedUsers = DoRequest<IEnumerable<GetUserRequest>>(UriForPath("/contacts.json", string.Format("page={0}", page))).ToList();
+				if (paginatedUsers.Any())
+				{
+					users.AddRange(paginatedUsers);
+					page++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			return users;
+		}
 
 
         #endregion
