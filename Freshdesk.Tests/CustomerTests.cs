@@ -35,7 +35,7 @@ namespace Freshdesk.Tests
             {
                 Customer = new Freshdesk.Customer()
                 {
-                    Name = "ACME Corp.",
+					Name = "ACME Corp. Division #" + Guid.NewGuid().ToString("N"),
                     Description = "The ACME Corporation"
                 }
             });

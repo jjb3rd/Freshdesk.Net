@@ -1,8 +1,8 @@
 # Freshdesk.NET 
 
-[![Travis](https://travis-ci.org/jjb3rd/Freshdesk.Net.svg)]()
-[![NuGet](https://img.shields.io/nuget/v/Freshdesk.svg)]()
-[![NuGet](https://img.shields.io/nuget/dt/Freshdesk.svg)]()
+[![Travis](https://travis-ci.org/jjb3rd/Freshdesk.Net.svg)](https://travis-ci.org/jjb3rd/Freshdesk.Net)
+[![NuGet](https://img.shields.io/nuget/v/Freshdesk.svg)](https://www.nuget.org/packages/Freshdesk/)
+[![NuGet](https://img.shields.io/nuget/dt/Freshdesk.svg)](https://www.nuget.org/packages/Freshdesk/)
 
 Freshdesk.Net is a .NET library for freshdesk.com's REST API.  It can be used to create contacts, customers and tickets (with attachments).  Freshdesk.Net also runs on Mono, so yay!
 
