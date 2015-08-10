@@ -26,15 +26,15 @@ namespace Freshdesk.Tests
 {
     public static class Settings
     {
-        private const string apiKey = "YOURAPIKEY";
-        private const string freshdeskUrl = "https://YOURCOMPANY.freshdesk.com";
+        //private const string apiKey = "YOURAPIKEY";
+        //private const string freshdeskUrl = "https://YOURCOMPANY.freshdesk.com";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Api"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk")]
         public static string FreshdeskApiKey
         {
             get
             {
-                return apiKey;
+                return System.Environment.GetEnvironmentVariable("FRESHDESK_APIKEY");
             }
         }
 
@@ -43,7 +43,7 @@ namespace Freshdesk.Tests
         {
             get
             {
-                return new Uri(freshdeskUrl);
+                return new Uri(System.Environment.GetEnvironmentVariable("FRESHDESK_URL"));
             }
         }
     }

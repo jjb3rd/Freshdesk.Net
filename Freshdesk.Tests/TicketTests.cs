@@ -19,17 +19,17 @@
  */
 using System.Collections.ObjectModel;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Freshdesk.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TicketTests
     {
         Freshdesk.FreshdeskService freshdeskService = new Freshdesk.FreshdeskService(Settings.FreshdeskApiKey, Settings.FreshdeskUri);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), TestMethod]
-        public void TestFreshdeskCreateTicket()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), Test]
+        public void FreshdeskCreateTicket()
         {
             // create Support Ticket for a followup demonstration with Support software integration
             Freshdesk.GetTicketResponse ticketResponse = freshdeskService.CreateTicket(new Freshdesk.CreateTicketRequest()
@@ -48,8 +48,8 @@ namespace Freshdesk.Tests
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), TestMethod]
-        public void TestFreshdeskCreateTicketWithAttachment()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), Test]
+        public void FreshdeskCreateTicketWithAttachment()
         {
             // create Support Ticket for a followup demonstration with Support software integration
             var ticketResponse = freshdeskService.CreateTicketWithAttachment(new CreateTicketRequest

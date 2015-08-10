@@ -17,17 +17,17 @@
  * limitations under the License.
  */
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Freshdesk.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class UserTests
     {
         Freshdesk.FreshdeskService freshdeskService = new Freshdesk.FreshdeskService(Settings.FreshdeskApiKey, Settings.FreshdeskUri);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), TestMethod]
-        public void TestFreshdeskCreateContact()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk"), Test]
+        public void FreshdeskCreateContact()
         {
             Freshdesk.GetUserResponse userResponse = freshdeskService.CreateUser(new Freshdesk.CreateUserRequest()
             {
