@@ -1,5 +1,5 @@
 # Freshdesk.NET 
-[![Travis](https://img.shields.io/travis/joyent/node.svg)]()
+[![Travis](https://travis-ci.org/jjb3rd/Freshdesk.Net.svg)]()
 
 Freshdesk.Net is a .NET library for freshdesk.com's REST API.  It can be used to create contacts, customers and tickets (with attachments).  
 
