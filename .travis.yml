@@ -6,3 +6,5 @@ install:
 script:
   - xbuild /p:Configuration=Release Freshdesk.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Freshdesk.Tests/bin/Release/Freshdesk.Tests.dll
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

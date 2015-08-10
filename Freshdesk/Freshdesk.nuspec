@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/jjb3rd/Freshdesk.Net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Added update user, get all users and custom fields.</releaseNotes>
+    <releaseNotes>Added unicode support.</releaseNotes>
     <copyright>Copyright 2014-2015 Beckersoft, Inc.</copyright>
     <tags>Freshdesk</tags>
   </metadata>

@@ -26,9 +26,6 @@ namespace Freshdesk.Tests
 {
     public static class Settings
     {
-        //private const string apiKey = "YOURAPIKEY";
-        //private const string freshdeskUrl = "https://YOURCOMPANY.freshdesk.com";
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Api"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Freshdesk")]
         public static string FreshdeskApiKey
         {

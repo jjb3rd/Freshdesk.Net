@@ -56,7 +56,7 @@ namespace Freshdesk.Tests
             {
                 TicketInfo = new CreateTicketInfo
                 {
-                    Email = "demo@acme.com",
+                    Email = "roadrunner@acme.com",
                     Subject = "Attachment test",
                     Description = "Description text",
                     Priority = 1,
