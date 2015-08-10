@@ -33,8 +33,8 @@ namespace Freshdesk.Tests
             {
                 User = new Freshdesk.User()
                 {
-                    Name = "Road Runner",
-                    Email = "roadrunner@acme.com"
+                    Name = "Bugs Bunny",
+                    Email = "bugs@acme.com"
                 }
             });
             Assert.IsNotNull(userResponse);
