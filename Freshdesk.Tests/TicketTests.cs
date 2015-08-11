@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using NUnit.Framework;
@@ -36,9 +37,9 @@ namespace Freshdesk.Tests
             {
                 TicketInfo = new Freshdesk.CreateTicketInfo()
                 {
-                    Email = "wilecoyote@acme.com",
-                    Subject = "ACME Corporation Initial Signup Demo",
-                    Description = "Initial Product Demo",
+					Email = "wilecoyote" + Guid.NewGuid().ToString("N") + "@acme.com",
+                    Subject = "ACME Corporation",
+					Description = "With test characters: à,è,ò",
                     Priority = 1,
                     Status = 2
                 }
@@ -56,8 +57,8 @@ namespace Freshdesk.Tests
             {
                 TicketInfo = new CreateTicketInfo
                 {
-                    Email = "roadrunner@acme.com",
-                    Subject = "Attachment test",
+					Email = "roadrunner" + Guid.NewGuid().ToString("N") + "@acme.com",
+	                Subject = "Attachment test",
                     Description = "Description text",
                     Priority = 1,
                     Status = 2
