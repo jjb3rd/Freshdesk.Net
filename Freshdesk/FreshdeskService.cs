@@ -280,21 +280,21 @@ namespace Freshdesk
 
         private static void WriteCrlf(Stream requestStream)
         {
-            byte[] crLf = Encoding.ASCII.GetBytes("\r\n");
+            byte[] crLf = Encoding.UTF8.GetBytes("\r\n");
             requestStream.Write(crLf, 0, crLf.Length);
         }
 
         private static void WriteBoundaryBytes(Stream requestStream, string b, bool isFinalBoundary)
         {
             string boundary = isFinalBoundary ? "--" + b + "--" : "--" + b + "\r\n";
-            byte[] d = Encoding.ASCII.GetBytes(boundary);
+            byte[] d = Encoding.UTF8.GetBytes(boundary);
             requestStream.Write(d, 0, d.Length);
         }
 
         private static void WriteContentDispositionFormDataHeader(Stream requestStream, string name)
         {
             string data = "Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n";
-            byte[] b = Encoding.ASCII.GetBytes(data);
+            byte[] b = Encoding.UTF8.GetBytes(data);
             requestStream.Write(b, 0, b.Length);
         }
 
@@ -302,13 +302,13 @@ namespace Freshdesk
         {
             string data = "Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + fileName + "\"\r\n";
             data += "Content-Type: " + contentType + "\r\n\r\n";
-            byte[] b = Encoding.ASCII.GetBytes(data);
+            byte[] b = Encoding.UTF8.GetBytes(data);
             requestStream.Write(b, 0, b.Length);
         }
 
         private static void WriteString(Stream requestStream, string data)
         {
-            byte[] b = Encoding.ASCII.GetBytes(data);
+            byte[] b = Encoding.UTF8.GetBytes(data);
             requestStream.Write(b, 0, b.Length);
         }
 
