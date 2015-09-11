@@ -33,5 +33,8 @@ namespace Freshdesk
 
         [JsonProperty(PropertyName = "cc_emails")]
         public string CCEmails { get; set; }
+
+		[JsonProperty(PropertyName = "helpdesk")]
+		public CreateTicketOptions Options { get; set; }
     }
 }
