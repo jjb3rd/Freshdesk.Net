@@ -48,6 +48,12 @@ namespace Freshdesk
         {
             this.ApiKey = apiKey;
             this.ApiUri = apiUri;
+            // Force TLS 1.1 or higher. Anything lower is deprecated in the Freshdesk API as of 2016-09-30
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
+            foreach (SecurityProtocolType p in SecurityProtocolType.GetValues(typeof(SecurityProtocolType)))
+            {
+                if (p > SecurityProtocolType.Tls11) ServicePointManager.SecurityProtocol |= p;
+            }
         }
         #endregion
 
