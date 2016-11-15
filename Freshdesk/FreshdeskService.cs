@@ -190,7 +190,10 @@ namespace Freshdesk
                 foreach (var pair in stringsContent)
                 {
                     WriteBoundaryBytes(requestStream, boundary, false);
-                    WriteContentDispositionFormDataHeader(requestStream, string.Format("{0}[{1}]", propertiesArrayName, pair.Key));
+                    if (pair.Key == "cc_emails")
+                        WriteContentDispositionFormDataHeader(requestStream, string.Format("{0}[{1}]", "cc_emails", ""));
+                    else
+                        WriteContentDispositionFormDataHeader(requestStream, string.Format("{0}[{1}]", propertiesArrayName, pair.Key));
                     WriteString(requestStream, pair.Value);
                     WriteCrlf(requestStream);
                 }
